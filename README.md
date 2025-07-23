@@ -1,4 +1,4 @@
-# MindScape - Mental Health Wellness App 🧠💙
+# MindScape - Mental Health Wellness 🧠💙
 
 A beautiful, comprehensive mental health application designed to support your wellness journey with modern web technologies and an intuitive user interface.
 
