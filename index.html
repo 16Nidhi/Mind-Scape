@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MINDSCAPE</title>
+    <link rel="stylesheet" href="static/style.css" />
+</head>
+<body>
+    <header>
+        <h1>MINDSCAPE</h1>
+        <div class="header-controls">
+            <div id="auth-section">
+                <span id="welcome-msg" style="display:none;">Welcome!</span>
+                <button id="login-btn" onclick="showLogin()">Login</button>
+                <button id="register-btn" onclick="showRegister()">Register</button>
+                <button id="logout-btn" onclick="logout()" style="display:none;">Logout</button>
+            </div>
+            <button id="theme-toggle" aria-label="Toggle theme" title="Toggle dark/light mode">🌙</button>
+        </div>
+    </header>
+
+    <!-- Login/Register Modal -->
+    <div id="auth-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="login-form">
+                <h2>Login</h2>
+                <input type="text" id="login-username" placeholder="Username">
+                <input type="password" id="login-password" placeholder="Password">
+                <button onclick="login()">Login</button>
+                <p>Don't have an account? <a href="#" onclick="switchToRegister()">Register</a></p>
+            </div>
+            <div id="register-form" style="display:none;">
+                <h2>Register</h2>
+                <input type="text" id="register-username" placeholder="Username">
+                <input type="email" id="register-email" placeholder="Email">
+                <input type="password" id="register-password" placeholder="Password">
+                <button onclick="register()">Register</button>
+                <p>Already have an account? <a href="#" onclick="switchToLogin()">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <section class="main">
+        <!-- Navigation Controls -->
+        <div class="page-navigation">
+            <button id="prev-page" onclick="changePage(-1)" disabled>← Previous</button>
+            <div class="page-indicator">
+                <span id="current-page">1</span> of <span id="total-pages">3</span>
+            </div>
+            <button id="next-page" onclick="changePage(1)">Next →</button>
+        </div>
+
+        <!-- Page 1: Mood & Wellness -->
+        <div class="page-content active" id="page-1">
+            <div class="cards-row">
+                <!-- Mood Section -->
+                <div class="card mood-section">
+                    <h2>Your Current Mood</h2>
+                    <p id="mood-display">😄 Happy</p>
+                    <button onclick="getMood()" id="mood-btn">Check Another Mood</button>
+                    <span id="mood-loading" style="display:none;">Loading...</span>
+                    <div class="mood-actions">
+                        <button onclick="getMoodInsights()" class="secondary-btn">Get Insights</button>
+                        <button onclick="getMoodPrediction()" class="secondary-btn">Mood Prediction</button>
+                    </div>
+                </div>
+
+                <!-- Quote Section -->
+                <div class="card quote-section">
+                    <h2>Daily Quote</h2>
+                    <p id="quote-display">🌟 You are stronger than you think.</p>
+                    <button onclick="getQuote()" id="quote-btn">New Quote</button>
+                    <span id="quote-loading" style="display:none;">Loading...</span>
+                </div>
+            </div>
+
+            <div class="cards-row">
+                <!-- Journal Section -->
+                <div class="card journal-section">
+                    <h2>Your Journal</h2>
+                    <textarea id="journal-input" placeholder="How are you feeling today?"></textarea>
+                    <button onclick="saveJournal()" id="journal-btn">Save Entry</button>
+                    <span id="journal-loading" style="display:none;">Saving...</span>
+                    <button onclick="showJournalEntries()" class="secondary-btn">View Past Entries</button>
+                    <h4>Past Entries</h4>
+                    <pre id="journal-log">No entries yet.</pre>
+                </div>
+
+                <!-- Mood History Section -->
+                <div class="card mood-log-section">
+                    <h2>Mood History</h2>
+                    <button onclick="showMoodLog()" id="moodlog-btn">Show Mood Log</button>
+                    <span id="moodlog-loading" style="display:none;">Loading...</span>
+                    <pre id="mood-log">No mood data</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2: Goals & Habits -->
+        <div class="page-content" id="page-2">
+            <div class="cards-row">
+                <!-- Goals Section -->
+                <div class="card goals-section">
+                    <h2>Mental Health Goals</h2>
+                    <div class="goal-input">
+                        <input type="text" id="goal-title" placeholder="Goal title">
+                        <input type="text" id="goal-description" placeholder="Description">
+                        <input type="date" id="goal-date">
+                        <button onclick="addGoal()">Add Goal</button>
+                    </div>
+                    <div id="goals-list">
+                        <p>No goals yet. Set your first mental health goal!</p>
+                    </div>
+                </div>
+
+                <!-- Reminders Section -->
+                <div class="card reminders-section">
+                    <h2>Daily Reminders</h2>
+                    <div class="reminder-input">
+                        <input type="text" id="reminder-title" placeholder="Reminder title">
+                        <input type="text" id="reminder-description" placeholder="Description">
+                        <input type="time" id="reminder-time">
+                        <button onclick="addReminder()">Add Reminder</button>
+                    </div>
+                    <div id="reminders-list">
+                        <p>No reminders set.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cards-row">
+                <!-- Gratitude Journal Section -->
+                <div class="card gratitude-section">
+                    <h2>🙏 Daily Gratitude</h2>
+                    <div class="gratitude-input">
+                        <input type="text" id="gratitude-entry" placeholder="What are you grateful for today?">
+                        <button onclick="addGratitude()">Add Gratitude</button>
+                    </div>
+                    <div id="gratitude-list">
+                        <p>No gratitude entries yet. Start your positivity journey!</p>
+                    </div>
+                    <div class="gratitude-stats">
+                        <span id="gratitude-count">Entries: 0</span>
+                        <button onclick="getGratitudePrompt()" class="secondary-btn">Get Prompt</button>
+                    </div>
+                </div>
+
+                <!-- Analytics Dashboard -->
+                <div class="card analytics-section">
+                    <h2>Your Wellness Dashboard</h2>
+                    <div class="analytics-grid">
+                        <button onclick="getPersonalizedTips()" class="analytics-btn">📊 Personalized Tips</button>
+                        <button onclick="getMoodAnalytics()" class="analytics-btn">📈 Mood Analytics</button>
+                        <button onclick="showNotifications()" class="analytics-btn">🔔 Notifications</button>
+                        <button onclick="searchJournal()" class="analytics-btn">🔍 Search Journal</button>
+                    </div>
+                    <div id="analytics-content">
+                        <p>Your wellness insights will appear here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 3: Meditation & Mindfulness -->
+        <div class="page-content" id="page-3">
+            <div class="cards-row single-card">
+                <!-- Meditation Section -->
+                <div class="card meditation-section large-card">
+                    <h2>Meditation & Mindfulness</h2>
+                    <div class="meditation-controls">
+                        <button onclick="getBreathingExercise()" class="meditation-btn">🫁 Breathing Exercise</button>
+                        <button onclick="getMeditationPrompt()" class="meditation-btn">🧘‍♀️ Meditation Guide</button>
+                        <button onclick="getCalmingActivity()" class="meditation-btn">🌿 Calming Activity</button>
+                    </div>
+                    <div class="timer-section">
+                        <label>Meditation Timer:</label>
+                        <select id="meditation-minutes">
+                            <option value="5">5 minutes</option>
+                            <option value="10">10 minutes</option>
+                            <option value="15">15 minutes</option>
+                            <option value="20">20 minutes</option>
+                        </select>
+                        <button onclick="startMeditationSession()" class="meditation-btn">Start Session</button>
+                    </div>
+                    <div id="meditation-content">
+                        <p>Choose a meditation practice above to begin your mindfulness journey.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Chatbot -->
+    <div class="chatbot-widget" id="chatbot">
+        <div class="chat-header" onclick="toggleChat()">🧠 MindBot</div>
+        <div class="chat-body" id="chat-body">
+            <div class="chat-log" id="chat-log">
+                <div><b>MindBot:</b> Hi! I'm your wellness companion. How can I help you today? 💙</div>
+            </div>
+            <input type="text" id="chat-input" placeholder="Ask me anything..." aria-label="Chat input" onkeydown="sendChat(event)">
+            <span id="chat-loading" style="display:none;">MindBot is thinking...</span>
+        </div>
+    </div>
+
+    <!-- Notification System -->
+    <div id="notification-container"></div>
+
+    <script src="static/script-github.js"></script>
+</body>
+</html>

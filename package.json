@@ -1,0 +1,11 @@
+{
+  "name": "mindcare-plus",
+  "description": "Mental health wellness application",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "javac -cp . *.java controllers/*.java",
+    "start": "java Main"
+  },
+  "keywords": ["mental-health", "wellness", "java"],
+  "license": "MIT"
+}
